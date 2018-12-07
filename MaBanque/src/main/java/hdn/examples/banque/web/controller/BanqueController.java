@@ -20,7 +20,7 @@ public class BanqueController {
 	@Autowired
 	private IGestionBanque service;
 	
-	@RequestMapping("comptes")
+	@RequestMapping("/comptes")
 	public String index() {
 			return "comptes";
 		
