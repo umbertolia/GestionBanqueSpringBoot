@@ -27,6 +27,5 @@ public class MaBanqueApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		
 		logger.info("Appli MaBanque lancée");
-		
 	}
 }
