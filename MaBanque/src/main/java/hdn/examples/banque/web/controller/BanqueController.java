@@ -21,7 +21,7 @@ public class BanqueController {
 	private IGestionBanque service;
 	
 	@RequestMapping("/comptes")
-	public String index() {
+	public String accueil() {
 			return "comptes";
 		
 	}
