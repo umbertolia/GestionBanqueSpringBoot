@@ -39,7 +39,7 @@ public class GestionBanqueImpl implements IGestionBanque {
 	private OperationRepository operationRepository;
 
 	@Override
-	public Compte consulterCompte(String codeCpte) {
+	public Compte consulterCompte(String codeCpte) throws BanqueException {
 		Optional<Compte> compte = compteRepository.findById(codeCpte);
 
 		if (compte.isPresent()) {

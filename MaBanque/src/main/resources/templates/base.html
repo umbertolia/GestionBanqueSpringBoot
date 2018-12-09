@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  
+  <head>
+    <title>GESTION BANQUE</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+
+  
+  </head>
+
+  <body>
+  	<header>
+  		<div class="navbar navbar-inverse">
+  			<div class="container-fluid">
+  				<ul class="nav navbar-nav">
+  					<li><a th:href="@{/operations}">Operations</a></li>
+  					<li><a th:href="@{/comptes}">Comptes</a></li>
+  				</ul>
+  			</div>
+  		</div>
+  	</header>
+  	
+  	<section layout:fragment="content"></section>
+  	
+  	<footer>
+  		<div class="navbar-fixed-bottom">
+  			<small>Adresse banque</small>
+  		</div>
+  	</footer>
+  </body>
+</html>
