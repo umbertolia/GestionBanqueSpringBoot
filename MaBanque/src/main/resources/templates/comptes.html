@@ -20,6 +20,7 @@
 								<button type="submit" class="btn btn-primary">OK</button>
 							</div>
 						</form>
+						<div class="text-danger" th:if="${exception}" th:text="${exception.messageErreur}"/>
 					</div>
 				</div>
 				
@@ -42,6 +43,40 @@
 							<label>Type</label>
 							<label th:text="${compte.class.simpleName}"></label>
 						</div>
+						<div th:if="${compte.class.simpleName == 'CompteCourant'}">
+							<label>Découvert : </label>
+							<label th:text="${compte.decouvert}"></label>
+						</div>
+						<div th:if="${compte.class.simpleName == 'CompteEpargne'}">
+							<label>Taux : </label>
+							<label th:text="${compte.taux}"></label>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="panel panel-primary" th:if="${compte}">
+					<div class="panel-heading">Operations sur le compte</div>
+					<div class="panel-body">
+						<form th:action="@{/operationcompte}" method="post">
+						</form> 
+					</div>
+				</div>
+				<div class="panel panel-primary" th:if="${compte}">
+					<div class="panel-heading">Liste des operations</div>
+					<div class="panel-body">
+						<table class="table table-striped">
+							<tr>
+								<th>Num</th><th>Type</th><th>Date</th><th>Montant</th>
+							</tr>
+							<tr th:each="op:${listeOperations}">
+								<td th:text="${op.numero}"></td>
+								<td th:text="${op.class.simpleName}"></td>
+								<td th:text="${op.dateOperation}"></td>
+								<td th:text="${op.montant}"></td>
+							</tr>
+						</table>
 					</div>
 				</div>
 			</div>
