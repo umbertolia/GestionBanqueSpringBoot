@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import hdn.examples.banque.entites.Compte;
 import hdn.examples.banque.entites.Operation;
@@ -28,6 +29,12 @@ public class BanqueController {
 	private IGestionBanque service;
 
 	private Logger logger = LoggerFactory.getLogger(BanqueController.class);
+	
+	private final String PAGE_FIRST = "0";
+	
+	private final String PAGE_SIZE_LIST_DEFAULT_VALUE = "4";
+	
+	
 
 	@RequestMapping("/operations")
 	public String operations() {
@@ -48,13 +55,17 @@ public class BanqueController {
 	}
 
 	@RequestMapping("/consultercompte")
-	public String consulterCompte(Model model, String codeCpte) {
+	public String consulterCompte(Model model, String codeCpte, 
+			@RequestParam(name="page", defaultValue=PAGE_FIRST) int page, 
+			@RequestParam(name="size", defaultValue=PAGE_SIZE_LIST_DEFAULT_VALUE) int size) {
 
 		try {
 			Compte compte = service.consulterCompte(codeCpte);
-			Page<Operation> operationsPaginee = service.listeOperations(codeCpte, 0, 4);
+			Page<Operation> operationsPaginee = service.listeOperations(codeCpte, page, size);
 			model.addAttribute("compte", compte);
 			model.addAttribute("listeOperations", operationsPaginee.getContent());
+			int[] pages = new int[operationsPaginee.getTotalPages()];
+			model.addAttribute("pages", pages);
 		} catch (BanqueException banqueException) {
 			logger.info("Aucun compte trouvé pour le n° de compte " + codeCpte);
 			model.addAttribute("exception", banqueException);
@@ -98,7 +109,7 @@ public class BanqueController {
 			BanqueException banqueException = new BanqueException("type operation non trouvee");
 			model.addAttribute("operationexception", banqueException);
 		}
-		return consulterCompte(model, codeCpte);
+		return consulterCompte(model, codeCpte, Integer.valueOf(PAGE_FIRST),  Integer.valueOf(PAGE_SIZE_LIST_DEFAULT_VALUE));
 	}
 
 	@RequestMapping("/listeoperations")
