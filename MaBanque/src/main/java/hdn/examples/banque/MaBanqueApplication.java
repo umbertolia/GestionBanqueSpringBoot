@@ -60,15 +60,9 @@ public class MaBanqueApplication implements CommandLineRunner{
 		operationRepository.save(new Retrait(new Date(), 700, cpt1));
 		operationRepository.save(new Versement(new Date(), 1504, cpt1));
 		
-		operationRepository.save(new Retrait(new Date(), 1500, cpt2));
-		operationRepository.save(new Retrait(new Date(), 80, cpt2));
-		operationRepository.save(new Versement(new Date(), 3545, cpt2));
-		operationRepository.save(new Retrait(new Date(), 10, cpt2));
-		operationRepository.save(new Versement(new Date(), 150, cpt2));
-		
 		//appel via le service
-		service.verser("CC1", 5000);
-		service.virement("CC1", "CE1", 2500);
+		//service.verser("CC1", 5000);
+		//service.virement("CC1", "CE1", 2500);
 		
 		logger.info("Appli MaBanque lancée");
 		

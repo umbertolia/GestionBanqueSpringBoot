@@ -45,7 +45,7 @@ public class GestionBanqueImpl implements IGestionBanque {
 		if (compte.isPresent()) {
 			return compte.get();
 		}
-		throw new BanqueException("Compte introuvable");
+		throw new BanqueException("Compte "+codeCpte+ " inexistant");
 	}
 
 	@Override
@@ -76,9 +76,23 @@ public class GestionBanqueImpl implements IGestionBanque {
 
 	@Override
 	public void virement(String codeCpte1, String codeCpte2, double montant) {
-		retirer(codeCpte1, montant);
-		verser(codeCpte2, montant);
-
+		if (codeCpte1.equals(codeCpte2)) {
+			throw new BanqueException("Virement impossible sur le meme compte");
+		}
+		try {
+			retirer(codeCpte1, montant);
+		}
+		catch (Exception exception) {
+			String message = "Retrait impossible du compte "+codeCpte1;
+			throw new BanqueException(message, exception);
+		}	
+		try {	
+			verser(codeCpte2, montant);
+		}
+		catch (Exception exception) {
+			String message = "Versement impossible sur le compte "+codeCpte2;
+			throw new BanqueException(message, exception);
+		}
 	}
 
 	@Override

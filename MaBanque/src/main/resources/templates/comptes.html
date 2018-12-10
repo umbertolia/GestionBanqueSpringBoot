@@ -60,7 +60,21 @@
 					<div class="panel-heading">Operations sur le compte</div>
 					<div class="panel-body">
 						<form th:action="@{/operationcompte}" method="post">
+							<input type="hidden" name="codeCpte" th:value="${compte.codeCompte}"/>
+							<input type="radio" name="typeOperation" value="VERS" checked="checked" onclick="document.getElementById('blocVirement').style.display='none'"></input> <label>Versement</label>
+							<input type="radio" name="typeOperation" value="RETR" onclick="document.getElementById('blocVirement').style.display='none'"></input> <label>Retrait</label>
+							<input type="radio" name="typeOperation" value="VIRM" onclick="document.getElementById('blocVirement').style.display='block'"></input> <label>Virement</label>
+							<div id="blocVirement" style="display:none">
+								<label>Versement vers </label>
+								<input type="text" name="codeCpt2"></input>
+							</div>
+							<div>
+								<label>Montant : </label>
+								<input type="text" name="montant"></input>	
+							</div>
+							<button type="submit" class="btn btn-primary">SAVE</button> 
 						</form> 
+						<div class="text-danger" th:if="${operationexception}" th:text="${operationexception.messageErreur}"/>
 					</div>
 				</div>
 				<div class="panel panel-primary" th:if="${compte}">
