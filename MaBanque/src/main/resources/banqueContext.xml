@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="welcomeMessage" class="java.lang.String">
+		<constructor-arg value="Application avec Spring Boot" />
+	</bean>
+
+	<bean id="dataSourceBanqueProperties"
+		class="hdn.examples.banque.conf.DataSourceProperties">
+		<constructor-arg value="${datasource1.name}" />
+		<property name="url" value="${datasource1.jdbc-url}" />
+		<property name="user" value="${datasource1.username}" />
+		<property name="password" value="${datasource1.password}" />
+		<property name="driverClassName"
+			value="${datasource1.driverClassName}" />
+		<property name="hibernateProperties"
+			ref="hibernateProperties" />
+	</bean>
+	
+	<bean id="dataSourceUsersProperties"
+		class="hdn.examples.banque.conf.DataSourceProperties">
+		<constructor-arg value="${datasource2.name}" />
+		<property name="url" value="${datasource2.jdbc-url}" />
+		<property name="user" value="${datasource2.username}" />
+		<property name="password" value="${datasource2.password}" />
+		<property name="driverClassName"
+			value="${datasource2.driverClassName}" />
+		<property name="hibernateProperties"
+			ref="hibernateProperties" />
+	</bean>
+
+	<bean id="hibernateProperties" class="java.util.Properties">
+		<constructor-arg>
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+			</props>
+		</constructor-arg>
+	</bean>
+
+</beans>  
