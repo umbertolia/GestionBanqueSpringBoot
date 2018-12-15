@@ -3,9 +3,10 @@
  */
 package hdn.examples.banque.dao;
 
-import hdn.examples.banque.entites.Client;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import hdn.examples.banque.entites.Client;
 
 /**
  * Auteur HDN
@@ -14,6 +15,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Cette classe permet de ...
 
  */
+
+@Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
 }

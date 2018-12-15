@@ -6,7 +6,7 @@
 		<meta charset="utf-8" />
 		<title>Gestion Banque / COMPTES</title>
 	</head>
-
+	
 	<body>
 		<div layout:fragment="content">
 			<div class="col-md-6">
@@ -61,6 +61,7 @@
 					<div class="panel-body">
 						<form th:action="@{/operationcompte}" method="post">
 							<input type="hidden" name="codeCpte" th:value="${compte.codeCompte}"/>
+							<input type="hidden" name="nomAction" th:value="creerOperation"/>
 							<input type="radio" name="typeOperation" value="VERS" checked="checked" onclick="document.getElementById('blocVirement').style.display='none'"></input> <label>Versement</label>
 							<input type="radio" name="typeOperation" value="RETR" onclick="document.getElementById('blocVirement').style.display='none'"></input> <label>Retrait</label>
 							<input type="radio" name="typeOperation" value="VIRM" onclick="document.getElementById('blocVirement').style.display='block'"></input> <label>Virement</label>

@@ -2,16 +2,6 @@ package hdn.examples.banque;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import hdn.examples.banque.dao.ClientRepository;
-import hdn.examples.banque.dao.CompteRepository;
-import hdn.examples.banque.dao.OperationRepository;
-import hdn.examples.banque.entites.Client;
-import hdn.examples.banque.entites.Compte;
-import hdn.examples.banque.entites.CompteCourant;
-import hdn.examples.banque.entites.CompteEpargne;
-import hdn.examples.banque.entites.Retrait;
-import hdn.examples.banque.entites.Versement;
-import hdn.examples.banque.metier.service.IGestionBanque;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +17,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+import hdn.examples.banque.dao.ClientRepository;
+import hdn.examples.banque.dao.CompteRepository;
+import hdn.examples.banque.dao.OperationRepository;
+import hdn.examples.banque.entites.Client;
+import hdn.examples.banque.entites.Compte;
+import hdn.examples.banque.entites.CompteCourant;
+import hdn.examples.banque.entites.CompteEpargne;
+import hdn.examples.banque.entites.Retrait;
+import hdn.examples.banque.entites.Versement;
+import hdn.examples.banque.metier.service.IGestionBanque;
+
+//@RunWith(SpringRunner.class)
 @SpringBootTest
 public class MaBanqueApplicationTests {
 
@@ -43,15 +44,9 @@ public class MaBanqueApplicationTests {
 	@Autowired
 	private IGestionBanque service;
 
-	@Value("${nom_DB}")
+	@Value("${datasource1.name}")
 	private String databaseName;
-	
-	
-	@Test
-	public void contextLoads() {
-	
-		
-	}
+
 
 	@Test
 	@Ignore("TESTED")
@@ -68,7 +63,11 @@ public class MaBanqueApplicationTests {
 		}
 	}
 	
+	@Test
+	//@Ignore("TESTED")
 	public void test1_Service() {
+		
+		System.out.println("test1_Service");
 		Client c1 = clientRepository.save(new Client("Umberto", "bertik@sfr.fr"));
 		Client c2 = clientRepository.save(new Client("Olga", "olga@sfr.fr"));
 		
@@ -91,7 +90,6 @@ public class MaBanqueApplicationTests {
 		service.verser("CC1", 5000);
 		service.virement("CC1", "CE1", 2500);
 	}
-
 
 	
 }

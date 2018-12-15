@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * Auteur HDN
@@ -21,6 +22,7 @@ import javax.persistence.OneToMany;
  */
 
 @Entity
+@Table(name = "client")
 public class Client implements Serializable {
 
 	private static final long serialVersionUID = -7132597131649072146L;

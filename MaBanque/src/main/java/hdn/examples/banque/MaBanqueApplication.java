@@ -8,7 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 
+import hdn.examples.banque.conf.BanqueProps;
+import hdn.examples.banque.conf.DataSourceProperties;
+import hdn.examples.banque.conf.PropertyNames;
 import hdn.examples.banque.dao.ClientRepository;
 import hdn.examples.banque.dao.CompteRepository;
 import hdn.examples.banque.dao.OperationRepository;
@@ -21,6 +27,9 @@ import hdn.examples.banque.entites.Versement;
 import hdn.examples.banque.metier.service.IGestionBanque;
 
 @SpringBootApplication
+@EnableConfigurationProperties(BanqueProps.class)
+@ImportResource(value = PropertyNames.APPLICATION_CONTEXT_FILE)
+@ComponentScan(basePackages = {"hdn..."})
 public class MaBanqueApplication implements CommandLineRunner{
 
 	private Logger logger = LoggerFactory.getLogger(MaBanqueApplication.class);
@@ -31,12 +40,21 @@ public class MaBanqueApplication implements CommandLineRunner{
 	@Autowired
 	private CompteRepository compteRepository;
 	
-	@Autowired
+	@Autowired 
 	private OperationRepository operationRepository;
-	
 	
 	@Autowired
 	private IGestionBanque service;
+	
+	@Autowired
+	DataSourceProperties dataSourceBanqueProperties; // exemple pour instancier un bean via un xml
+	
+	@Autowired
+	BanqueProps banqueProps; // exemple pour instancier un bean via @ConfigurationProperties
+	
+	@Autowired 
+	String welcomeMessage; // exemple pour instancier un bean instancié dans un xml
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(MaBanqueApplication.class, args);
@@ -47,6 +65,14 @@ public class MaBanqueApplication implements CommandLineRunner{
 	// appellé au lancement du contexte applicatif
 	public void run(String... args) throws Exception {
 		
+		logger.info(welcomeMessage);
+		logger.info("DATABASES : ");
+		if (banqueProps != null) {
+			for (String databaseName : banqueProps.getDatasources()) {
+				logger.info(databaseName);
+			}
+		}
+				
 		Client c1 = clientRepository.save(new Client("Umberto", "bertik@sfr.fr"));
 		Client c2 = clientRepository.save(new Client("Olga", "olga@sfr.fr"));
 		
@@ -65,8 +91,6 @@ public class MaBanqueApplication implements CommandLineRunner{
 		//service.virement("CC1", "CE1", 2500);
 		
 		logger.info("Appli MaBanque lancée");
-		
-		
 		
 	}
 }

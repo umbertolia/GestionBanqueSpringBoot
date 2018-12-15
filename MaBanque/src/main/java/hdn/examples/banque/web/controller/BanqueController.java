@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hdn.examples.banque.entites.Compte;
@@ -36,25 +37,19 @@ public class BanqueController {
 	
 	
 
-	@RequestMapping("/operations")
+	@GetMapping("/operations")
 	public String operations() {
 		return "comptes";
 
 	}
 
-	@RequestMapping("/comptes")
-	public String comptes() {
-		return "comptes";
-
-	}
-
-	@RequestMapping("/clients")
+	@GetMapping("/clients")
 	public String clients() {
 		return "comptes";
 
 	}
 
-	@RequestMapping("/consultercompte")
+	@GetMapping("/consultercompte")
 	public String consulterCompte(Model model, String codeCpte, 
 			@RequestParam(name="page", defaultValue=PAGE_FIRST) int page, 
 			@RequestParam(name="size", defaultValue=PAGE_SIZE_LIST_DEFAULT_VALUE) int size) {
@@ -74,8 +69,8 @@ public class BanqueController {
 		return "comptes";
 	}
 
-	@RequestMapping("/operationcompte")
-	public String lancerOperationSurCompte(Model model, String codeCpte, String codeCpt2, String typeOperation, String montant) {
+	@PostMapping("/operationcompte")
+	public String creerOperation(Model model, String codeCpte, String codeCpt2, String typeOperation, String montant) {
 		try {
 			TypeOp typeOp = TypeOp.valueOf(typeOperation);
 			switch (typeOp) {
@@ -112,10 +107,18 @@ public class BanqueController {
 		return consulterCompte(model, codeCpte, Integer.valueOf(PAGE_FIRST),  Integer.valueOf(PAGE_SIZE_LIST_DEFAULT_VALUE));
 	}
 
-	@RequestMapping("/listeoperations")
+	@GetMapping("/listeoperations")
 	public String listerOperationsCompte(Model model, String codeCpte) {
 
 		return "comptes";
 	}
+	
+	
+	// param envoye depuis le handler
+	@GetMapping("/403")
+   public String error403(Model model, @RequestParam(name="nomAction") String actionName) {
+		model.addAttribute("nomAction", actionName);
+		return "403";
+   }
 
 }
