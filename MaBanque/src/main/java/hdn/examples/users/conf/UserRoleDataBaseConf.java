@@ -21,7 +21,7 @@ import hdn.examples.banque.conf.PropertyNames;
 
 
 @Configuration
-@PropertySource(PropertyNames.APPLICATION_PROPERTIES_FILE)
+@PropertySource("classpath:"+PropertyNames.APPLICATION_PROPERTIES_FILE)
 @EnableJpaRepositories(basePackages = {
 		"hdn.examples.users..." }, entityManagerFactoryRef = "entityManagerFactory2", transactionManagerRef = "transactionManager2")
 @EnableTransactionManagement
@@ -45,8 +45,13 @@ public class UserRoleDataBaseConf {
 		factoryBean.setDataSource(db);
 		factoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 		factoryBean.setJpaProperties(hibernateProperties);
+		factoryBean.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "update"); // pas de reinit de la datasource USERS
+		
+		
 		factoryBean.setPackagesToScan("hdn.examples.users...");
 		factoryBean.setPersistenceUnitName("users");
+		
+		
 
 		return factoryBean;
 	}

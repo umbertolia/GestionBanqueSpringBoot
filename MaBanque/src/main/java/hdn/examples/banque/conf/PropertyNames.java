@@ -10,7 +10,9 @@ public final class PropertyNames {
 	public static final String APPLICATION_CONTEXT_FILE = "banqueContext.xml";
 
 	public static final String APPLICATION_PROPERTIES_FILE = "banque.properties";
-
+	
+	public static final String APPLICATION_PROPERTIES_FILE_TEST = "banque-test.properties";
+	
 	// CONSTANTES DATABASE BANQUE
 
 	public static final String DATABASE_BANQUE_PROPERTIES_PREFIX = "${datasource1_prefix}";

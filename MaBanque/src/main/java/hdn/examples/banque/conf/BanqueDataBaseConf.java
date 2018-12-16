@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @Configuration
-@PropertySource(PropertyNames.APPLICATION_PROPERTIES_FILE)
+@PropertySource("classpath:"+PropertyNames.APPLICATION_PROPERTIES_FILE)
 @EnableJpaRepositories(basePackages = {
 		"hdn.examples.banque..." }, entityManagerFactoryRef = "entityManagerFactory1", transactionManagerRef = "transactionManager1")
 @EnableTransactionManagement

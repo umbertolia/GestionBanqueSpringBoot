@@ -28,7 +28,7 @@ import hdn.examples.banque.metier.service.IGestionBanque;
 
 @SpringBootApplication
 @EnableConfigurationProperties(BanqueProps.class)
-@ImportResource(value = PropertyNames.APPLICATION_CONTEXT_FILE)
+@ImportResource("classpath:"+PropertyNames.APPLICATION_CONTEXT_FILE)
 @ComponentScan(basePackages = {"hdn..."})
 public class MaBanqueApplication implements CommandLineRunner{
 
