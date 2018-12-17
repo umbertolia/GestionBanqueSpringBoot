@@ -33,14 +33,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		// users + roles recuperes depuis une DB
 	
-		  auth.jdbcAuthentication().dataSource(em.getDataSource()).
-		  usersByUsernameQuery("select username as principal, password as credentials from user where username=?"
-		  )
-		  .authoritiesByUsernameQuery("select usename as principal, role as role from role_user where username=?"
-		  ) .rolePrefix("ROLE_") .passwordEncoder(passwordEncoder());
+		  auth.jdbcAuthentication().dataSource(em.getDataSource())
+		  .usersByUsernameQuery(getUserQuery())
+		  .authoritiesByUsernameQuery("select distinct user_name as principal, role_name as role from user_avec_role where user_name=?"
+		  ).passwordEncoder(passwordEncoder());
 		 
 
 	}
+	
+	
+	 private String getUserQuery() {
+       return "select username as principal, password as credentials, actif as active from user where username=?";
+   }
+
+
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

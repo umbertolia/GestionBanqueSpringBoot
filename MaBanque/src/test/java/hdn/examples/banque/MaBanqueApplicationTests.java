@@ -1,5 +1,6 @@
 package hdn.examples.banque;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -132,9 +133,42 @@ public class MaBanqueApplicationTests {
 			// via un entityManager
 			EntityManagerFactory emf = jpaTrxManager.getEntityManagerFactory();
 			EntityManager em = emf.createEntityManager();
-			User userAdmin = em.find(User.class, "admin");
 
-			assertNotNull(userAdmin);
+			em.getTransaction().begin();
+			User userAdmin = new User("admin", "admin", true);
+			User user = new User("hdn", "hdn", true);
+
+			// creation des users s'ils n'existent pas
+			if (em.find(User.class, userAdmin.getUsername()) == null) {
+				em.persist(userAdmin);
+			}
+			if (em.find(User.class, user.getUsername()) == null) {
+				em.persist(user);
+			}
+
+			Role roleAdmin = new Role("administrator");
+			Role roleUser = new Role("user");
+
+			if (em.find(Role.class, roleAdmin.getRoleName()) == null) {
+				em.persist(roleAdmin);
+			}
+			if (em.find(Role.class, roleUser.getRoleName()) == null) {
+				em.persist(roleUser);
+			}
+
+			em.getTransaction().commit();
+			//
+			em.getTransaction().begin();
+
+			User admin = em.find(User.class, "admin");
+			if (admin != null) {
+				admin.getRoles().clear();
+				admin.getRoles().add(em.find(Role.class, "administrator"));
+				admin.getRoles().add(em.find(Role.class, "user"));
+			}
+			em.getTransaction().commit();
+
+			assertEquals(em.find(User.class, "admin").getRoles().size(), 2);
 
 			// via un criteraiBuilder
 			CriteriaBuilder builder = jpaTrxManager.getEntityManagerFactory().getCriteriaBuilder();

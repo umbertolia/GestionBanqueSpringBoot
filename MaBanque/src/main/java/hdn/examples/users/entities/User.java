@@ -3,17 +3,21 @@ package hdn.examples.users.entities;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+
 /**
- * Auteur HDN
- * Crée le Dec 6, 2018
+ * Auteur HDN Crée le Dec 6, 2018
  *
  * Cette classe permet de ...
-
+ * 
  */
 
 @Entity
@@ -27,17 +31,31 @@ public class User implements Serializable {
 
 	@Id
 	private String username;
-	
+
 	private String password;
-	
-	private int age;
-	
-	@ManyToMany
+
+	private boolean actif;
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "user_avec_role", joinColumns = {
+			@JoinColumn(name = "user_name", referencedColumnName = "username") }, inverseJoinColumns = {
+					@JoinColumn(name = "role_name", referencedColumnName = "rolename") })
 	private Collection<Role> roles;
 
 	public User() {
 		super();
 	}
+	
+	
+
+	public User(String username, String password, boolean actif) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.actif = actif;
+	}
+
+
 
 	public String getUsername() {
 		return username;
@@ -55,12 +73,12 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public int getAge() {
-		return age;
+	public boolean isActif() {
+		return actif;
 	}
 
-	public void setAge(int age) {
-		this.age = age;
+	public void setActif(boolean actif) {
+		this.actif = actif;
 	}
 
 	public Collection<Role> getRoles() {
@@ -71,9 +89,4 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	
-	
-	
-	
-	
 }
