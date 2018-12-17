@@ -2,6 +2,7 @@ package hdn.examples.banque.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -11,62 +12,57 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandler;
+
+import hdn.examples.banque.conf.BanqueProps;
+import hdn.examples.banque.web.controller.AccesRefuseHandler;
 
 @Configuration
-@EnableWebSecurity	
+@EnableWebSecurity
+@EnableConfigurationProperties(BanqueProps.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	 @Autowired
-   private AccessDeniedHandler accessDeniedHandler;
+	@Autowired
+	private AccesRefuseHandler accessDeniedHandler;
 
-	 @Autowired 
-	 @Qualifier("entityManagerFactory2")
-	 LocalContainerEntityManagerFactoryBean em;
-	 
+	@Autowired
+	@Qualifier("entityManagerFactory2")
+	LocalContainerEntityManagerFactoryBean em;
+	
+	@Autowired
+	BanqueProps banqueProps; // exemple pour instancier un bean via @ConfigurationProperties
+	
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		//auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN", "USER");
-		//auth.inMemoryAuthentication().withUser("toto").password(passwordEncoder().encode("toto")).roles("USER");
+	// Authentification avec users et roles statiques	
+	//auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder().encode("admin")).roles("administrator", "user");
+	//auth.inMemoryAuthentication().withUser("toto").password(passwordEncoder().encode("toto")).roles("user");
 		
-		// users + roles recuperes depuis une DB
-	
-		  auth.jdbcAuthentication().dataSource(em.getDataSource())
-		  .usersByUsernameQuery(getUserQuery())
-		  .authoritiesByUsernameQuery("select distinct user_name as principal, role_name as role from user_avec_role where user_name=?"
-		  ).passwordEncoder(passwordEncoder());
-		 
+	// Authentification avec users et roles en DB
 
+	auth.jdbcAuthentication().dataSource(em.getDataSource())
+		  .usersByUsernameQuery(banqueProps.getQueryUser())
+		  .authoritiesByUsernameQuery(banqueProps.getQueryRole())
+		  .rolePrefix("ROLE_")
+		  .passwordEncoder(passwordEncoder());
 	}
-	
-	
-	 private String getUserQuery() {
-       return "select username as principal, password as credentials, actif as active from user where username=?";
-   }
-
-
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-		 	.authorizeRequests()
-		 		.antMatchers("/operations/**").permitAll()
-		 		.antMatchers("/consultercompte/**").hasAnyRole("USER")
-		 		.antMatchers("/operationcompte/**").hasAnyRole("ADMIN")
-		 		.and()
-		 		.formLogin().loginPage("/login").permitAll()
-		 			.and()
-		 		.logout().permitAll()
-		 			.and()
-		 		.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+		http.csrf().disable().authorizeRequests().antMatchers("/operations/**").permitAll()
+				.antMatchers("/comptes/**").hasRole(banqueProps.getRoleAdmin())
+				.antMatchers("/clients/**").hasRole(banqueProps.getRoleAdmin())
+				.antMatchers("/consultercompte/**").hasRole(banqueProps.getRoleUser())
+				.antMatchers("/operationcompte/**").hasRole(banqueProps.getRoleAdmin())
+				.and().formLogin().loginPage("/login").permitAll()
+				.and().logout().permitAll()
+				.and().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+
 	}
 
-
-	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 }

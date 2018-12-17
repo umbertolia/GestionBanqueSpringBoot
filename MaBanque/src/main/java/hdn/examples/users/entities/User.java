@@ -1,7 +1,7 @@
 package hdn.examples.users.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -40,13 +40,11 @@ public class User implements Serializable {
 	@JoinTable(name = "user_avec_role", joinColumns = {
 			@JoinColumn(name = "user_name", referencedColumnName = "username") }, inverseJoinColumns = {
 					@JoinColumn(name = "role_name", referencedColumnName = "rolename") })
-	private Collection<Role> roles;
+	private List<Role> roles;
 
 	public User() {
 		super();
 	}
-	
-	
 
 	public User(String username, String password, boolean actif) {
 		super();
@@ -54,8 +52,6 @@ public class User implements Serializable {
 		this.password = password;
 		this.actif = actif;
 	}
-
-
 
 	public String getUsername() {
 		return username;
@@ -81,11 +77,11 @@ public class User implements Serializable {
 		this.actif = actif;
 	}
 
-	public Collection<Role> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Collection<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 

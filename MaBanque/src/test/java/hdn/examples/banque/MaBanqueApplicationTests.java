@@ -9,8 +9,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -80,6 +81,9 @@ public class MaBanqueApplicationTests {
 	@Autowired
 	@Qualifier("transactionManager2")
 	JpaTransactionManager jpaTrxManager;
+	
+	@Autowired
+	PasswordEncoder encoder;
 
 	@Test
 	@Ignore("TESTED OK")
@@ -135,40 +139,34 @@ public class MaBanqueApplicationTests {
 			EntityManager em = emf.createEntityManager();
 
 			em.getTransaction().begin();
-			User userAdmin = new User("admin", "admin", true);
-			User user = new User("hdn", "hdn", true);
+			// il faut encoder le mot de passe sinon il y a un BadCredentialsException lors du login
+			// BadCredentialsException est levee lors du BCryptPasswordEncoder.matches(CharSequence rawPassword, String encodedPassword)
+			User userAdmin = new User("admin", encoder.encode("admin"), true);
+			User userLambda = new User("hdn", encoder.encode("hdn"), true);
+			
+			Role roleAdmin = new Role("administrator");
+			Role roleUser = new Role("user");
 
+			
+			userAdmin.setRoles(Arrays.asList(roleAdmin, roleUser));
+			userLambda.setRoles(Arrays.asList(roleUser));
+
+			
 			// creation des users s'ils n'existent pas
 			if (em.find(User.class, userAdmin.getUsername()) == null) {
 				em.persist(userAdmin);
 			}
-			if (em.find(User.class, user.getUsername()) == null) {
-				em.persist(user);
-			}
-
-			Role roleAdmin = new Role("administrator");
-			Role roleUser = new Role("user");
-
-			if (em.find(Role.class, roleAdmin.getRoleName()) == null) {
-				em.persist(roleAdmin);
-			}
-			if (em.find(Role.class, roleUser.getRoleName()) == null) {
-				em.persist(roleUser);
-			}
-
+			if (em.find(User.class, userLambda.getUsername()) == null) {
+				em.persist(userLambda);
+			}	
+			
 			em.getTransaction().commit();
-			//
-			em.getTransaction().begin();
-
+			
 			User admin = em.find(User.class, "admin");
-			if (admin != null) {
-				admin.getRoles().clear();
-				admin.getRoles().add(em.find(Role.class, "administrator"));
-				admin.getRoles().add(em.find(Role.class, "user"));
-			}
-			em.getTransaction().commit();
 
-			assertEquals(em.find(User.class, "admin").getRoles().size(), 2);
+			if (admin.getRoles() != null) {
+				assertEquals(admin.getRoles().size(), 2);
+			}
 
 			// via un criteraiBuilder
 			CriteriaBuilder builder = jpaTrxManager.getEntityManagerFactory().getCriteriaBuilder();

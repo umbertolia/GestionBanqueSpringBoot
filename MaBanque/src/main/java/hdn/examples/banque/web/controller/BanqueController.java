@@ -42,9 +42,16 @@ public class BanqueController {
 		return "comptes";
 
 	}
+	
+	@GetMapping("/comptes")
+	public String comptes() {
+		// TODO à implementer
+		return "comptes";
+	}
 
 	@GetMapping("/clients")
 	public String clients() {
+	// TODO à implementer
 		return "comptes";
 
 	}

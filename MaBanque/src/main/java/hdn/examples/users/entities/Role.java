@@ -1,7 +1,7 @@
 package hdn.examples.users.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,12 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+
 /**
- * Auteur HDN
- * Crée le Dec 6, 2018
+ * Auteur HDN Crée le Dec 6, 2018
  *
  * Cette classe permet de ...
-
+ * 
  */
 
 @Entity
@@ -28,30 +28,24 @@ public class Role implements Serializable {
 
 	@Id
 	private String roleName;
-		
-	@ManyToMany (mappedBy="roles", fetch = FetchType.EAGER)
-	private Collection<User> users;
+
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+	private List<User> users;
 
 	public Role() {
 		super();
 	}
 
-	
-	
 	public Role(String roleName) {
 		super();
 		this.roleName = roleName;
 	}
 
-
-
-	public Role(String roleName, Collection<User> users) {
+	public Role(String roleName, List<User> users) {
 		super();
 		this.roleName = roleName;
 		this.users = users;
 	}
-
-
 
 	public String getRoleName() {
 		return roleName;
@@ -61,14 +55,12 @@ public class Role implements Serializable {
 		this.roleName = roleName;
 	}
 
-	public Collection<User> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(Collection<User> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
 
-	
-	
-	}
+}

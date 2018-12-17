@@ -23,6 +23,6 @@ public class SecurityController {
 	@RequestMapping(value="/")
 	// action par defaut
 	public String defaultAction() {
-		return "comptes";
+		return "redirect:/operations";
 	}
 }

@@ -12,6 +12,14 @@ public class BanqueProps {
 	String nom;
 	
 	List<String> datasources;
+	
+	String queryUser;
+	
+	String queryRole;
+	
+	String roleAdmin;
+	
+	String roleUser;
 
 	public String getNom() {
 		return nom;
@@ -27,6 +35,38 @@ public class BanqueProps {
 
 	public void setDatasources(List<String> datasources) {
 		this.datasources = datasources;
+	}
+
+	public String getQueryUser() {
+		return queryUser;
+	}
+
+	public void setQueryUser(String queryUser) {
+		this.queryUser = queryUser;
+	}
+
+	public String getQueryRole() {
+		return queryRole;
+	}
+
+	public void setQueryRole(String queryRole) {
+		this.queryRole = queryRole;
+	}
+
+	public String getRoleAdmin() {
+		return roleAdmin;
+	}
+
+	public void setRoleAdmin(String roleAdmin) {
+		this.roleAdmin = roleAdmin;
+	}
+
+	public String getRoleUser() {
+		return roleUser;
+	}
+
+	public void setRoleUser(String roleUser) {
+		this.roleUser = roleUser;
 	}
 	
 	
