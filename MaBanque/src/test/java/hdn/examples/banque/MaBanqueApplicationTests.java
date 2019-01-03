@@ -86,7 +86,7 @@ public class MaBanqueApplicationTests {
 	PasswordEncoder encoder;
 
 	@Test
-	@Ignore("TESTED OK")
+	//@Ignore("TESTED OK")
 	public void test0_JdbcConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -101,7 +101,7 @@ public class MaBanqueApplicationTests {
 	}
 
 	@Test
-	@Ignore("TESTED OK")
+	//@Ignore("TESTED OK")
 	public void test1_Service() {
 
 		System.out.println("test1_Service");
@@ -128,7 +128,7 @@ public class MaBanqueApplicationTests {
 	}
 
 	@Test
-	@Ignore("TESTED OK")
+	//@Ignore("TESTED OK")
 	public void test2_lireDataSourceUsers() {
 		System.out.println("hello");
 
